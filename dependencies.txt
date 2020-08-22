@@ -1,0 +1,12 @@
+com.miya10kei:hello-event-loop:jar:1.0.0-SNAPSHOT
++- org.projectlombok:lombok:jar:1.18.2:provided
++- org.spockframework:spock-core:jar:2.0-M3-groovy-3.0:test
+|  +- org.codehaus.groovy:groovy:jar:3.0.4:test
+|  +- org.junit.platform:junit-platform-engine:jar:1.7.0-M1:test
+|  |  +- org.apiguardian:apiguardian-api:jar:1.1.0:test
+|  |  +- org.opentest4j:opentest4j:jar:1.2.0:test
+|  |  \- org.junit.platform:junit-platform-commons:jar:1.7.0-M1:test
+|  \- org.hamcrest:hamcrest-core:jar:2.2:test
+|     \- org.hamcrest:hamcrest:jar:2.2:test
++- net.bytebuddy:byte-buddy:jar:1.9.3:test
+\- org.objenesis:objenesis:jar:2.6:test

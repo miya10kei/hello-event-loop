@@ -16,7 +16,10 @@
     <main.class>com.miya10kei.Main</main.class>
 
     <dependencies.lombok.version>1.18.2</dependencies.lombok.version>
-    <dependencies.slf4j.version>1.7.30</dependencies.slf4j.version>
+
+    <dependencies.spock.version>2.0-M3-groovy-3.0</dependencies.spock.version>
+    <dependencies.byte-buddy.version>1.9.3</dependencies.byte-buddy.version>
+    <dependencies.objenesis.version>2.6</dependencies.objenesis.version>
 
     <plugins.bug-pattern.version>1.5.0</plugins.bug-pattern.version>
     <plugins.checkstyle.version>3.1.1</plugins.checkstyle.version>
@@ -25,19 +28,26 @@
     <plugins.dependency.version>3.1.2</plugins.dependency.version>
     <plugins.errorprone.version>2.4.0</plugins.errorprone.version>
     <plugins.exec.version>3.0.0</plugins.exec.version>
+    <plugins.gmavenplus.version>1.6</plugins.gmavenplus.version>
     <plugins.jar.version>3.2.0</plugins.jar.version>
     <plugins.sb-contrib.version>7.4.7</plugins.sb-contrib.version>
     <plugins.spotbugs.version>4.0.4</plugins.spotbugs.version>
     <plugins.surefire.version>2.22.2</plugins.surefire.version>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${dependencies.slf4j.version}</version>
-    </dependency>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.spockframework</groupId>
+        <artifactId>spock-bom</artifactId>
+        <version>${dependencies.spock.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
+  <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -46,15 +56,20 @@
     </dependency>
 
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.5.2</version>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.14.0</version>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>${dependencies.byte-buddy.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.objenesis</groupId>
+      <artifactId>objenesis</artifactId>
+      <version>${dependencies.objenesis.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -87,9 +102,27 @@
       </plugin>
 
       <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+        <version>${plugins.gmavenplus.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compileTests</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${plugins.surefire.version}</version>
+        <configuration>
+          <includes>
+            <include>**/*Spec.java</include>
+          </includes>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -164,6 +197,16 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/libs</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>tree</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>tree</goal>
+            </goals>
+            <configuration>
+              <outputFile>dependencies.txt</outputFile>
             </configuration>
           </execution>
         </executions>
